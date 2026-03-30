@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --moat-bg: #09090b;
+  --moat-surface: rgba(255, 255, 255, 0.02);
+  --moat-border: rgba(255, 255, 255, 0.06);
+  --moat-green: #34c759;
+  --moat-red: #ff3b30;
+  --moat-orange: #ff9500;
+  --moat-blue: #007aff;
+  --moat-purple: #8b5cf6;
+}
+
+body {
+  background: var(--moat-bg);
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}

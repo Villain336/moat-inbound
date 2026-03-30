@@ -2,6 +2,16 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  Title,
+  Text,
+  Card,
+  Button,
+  TextInput,
+  Group,
+  Badge,
+  UnstyledButton,
+} from '@mantine/core';
 import { formatDistanceToNow } from 'date-fns';
 
 interface ListEntry {
@@ -24,14 +34,11 @@ export function AllowBlockLists({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold font-display tracking-tight">
-          Allow / Block Lists
-        </h1>
-        <p className="text-white/40 font-mono text-xs mt-1">
+        <Title order={2} className="font-display tracking-tight">Allow / Block Lists</Title>
+        <Text size="xs" c="dimmed" className="font-mono mt-1">
           MANAGE TRUSTED AND BLOCKED SENDERS
-        </p>
+        </Text>
       </div>
-
       <div className="grid lg:grid-cols-2 gap-6">
         <ListSection
           title="Allowlist"
@@ -69,17 +76,10 @@ function ListSection({
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const borderColor = color === 'green' ? 'border-moat-green/20' : 'border-moat-red/20';
-  const accentColor = color === 'green' ? 'text-moat-green' : 'text-moat-red';
-  const bgAccent = color === 'green' ? 'bg-moat-green/10' : 'bg-moat-red/10';
-
   const handleAdd = async () => {
     if (!input.trim()) return;
     setLoading(true);
-
-    // Support comma-separated bulk input
     const items = input.split(',').map((s) => s.trim()).filter(Boolean);
-
     for (const item of items) {
       const entryType = item.includes('@') ? 'email' : 'domain';
       await fetch(endpoint, {
@@ -88,7 +88,6 @@ function ListSection({
         body: JSON.stringify({ entry: item, entryType }),
       });
     }
-
     setInput('');
     setLoading(false);
     router.refresh();
@@ -99,73 +98,72 @@ function ListSection({
     router.refresh();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAdd();
-    }
-  };
-
   return (
-    <div className={`rounded-xl border ${borderColor} bg-white/[0.02] p-5`}>
+    <Card
+      padding="lg"
+      radius="lg"
+      className={`bg-metallic shadow-card border ${
+        color === 'green' ? 'border-moat-success/20' : 'border-moat-danger/20'
+      }`}
+    >
       <div className="mb-4">
-        <h2 className={`font-display font-semibold text-lg ${accentColor}`}>
+        <Text fw={600} size="lg" className="font-display" c={color === 'green' ? 'green' : 'red'}>
           {title}
-        </h2>
-        <p className="text-white/30 text-xs font-mono mt-0.5">{subtitle}</p>
+        </Text>
+        <Text size="xs" c="dimmed" className="font-mono mt-0.5">{subtitle}</Text>
       </div>
 
-      {/* Add Input */}
-      <div className="flex gap-2 mb-4">
-        <input
+      <Group gap="xs" className="mb-4">
+        <TextInput
+          flex={1}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
           placeholder="domain.com or email@domain.com"
-          className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm outline-none focus:border-white/20 font-mono"
+          size="sm"
+          className="font-mono"
         />
-        <button
+        <Button
           onClick={handleAdd}
-          disabled={loading}
-          className={`px-4 py-2 rounded-lg ${bgAccent} ${accentColor} text-sm font-medium border ${borderColor} hover:opacity-80 transition-opacity disabled:opacity-50`}
+          loading={loading}
+          variant="light"
+          color={color}
+          size="sm"
         >
-          {loading ? '...' : 'Add'}
-        </button>
-      </div>
+          Add
+        </Button>
+      </Group>
 
-      {/* Entries */}
-      <div className="space-y-1 max-h-80 overflow-y-auto">
+      <div className="space-y-1 max-h-72 overflow-y-auto">
         {entries.map((entry) => (
           <div
             key={entry.id}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.03] group"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/60 group"
           >
-            <span className="text-sm font-mono flex-1 truncate">
+            <Text size="sm" className="font-mono flex-1 truncate">
               {entry.entry}
-            </span>
-            <span className="text-[10px] font-mono text-white/20">
-              {entry.entryType}
-            </span>
-            <span className="text-[10px] font-mono text-white/15">
+            </Text>
+            <Badge variant="light" color="gray" size="xs">{entry.entryType}</Badge>
+            <Text size="xs" c="dimmed" className="font-mono">
               {entry.addedBy || 'manual'}
-            </span>
-            <span className="text-[10px] font-mono text-white/15 w-16 text-right">
+            </Text>
+            <Text size="xs" c="dimmed" className="font-mono w-14 text-right">
               {formatDistanceToNow(new Date(entry.createdAt), { addSuffix: false })}
-            </span>
-            <button
+            </Text>
+            <UnstyledButton
               onClick={() => handleRemove(entry.id)}
-              className="text-white/0 group-hover:text-white/30 hover:!text-moat-red transition-colors text-xs"
+              className="opacity-0 group-hover:opacity-100 text-moat-silver-dark hover:text-moat-danger text-xs transition-opacity"
             >
-              ✕
-            </button>
+              {'\u2715'}
+            </UnstyledButton>
           </div>
         ))}
         {entries.length === 0 && (
-          <p className="text-white/15 text-sm font-mono text-center py-6">
+          <Text size="sm" c="dimmed" className="font-mono text-center py-6">
             No entries yet
-          </p>
+          </Text>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

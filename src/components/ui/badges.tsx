@@ -65,6 +65,8 @@ export function ChannelIcon({ channel }: { channel: string }) {
     email: '\u2709',
     linkedin: 'in',
     twitter: 'X',
+    sms: '\u2706',
+    phone: '\u260E',
   };
 
   return (

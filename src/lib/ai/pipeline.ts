@@ -13,7 +13,11 @@ import {
 } from '@/lib/db/queries';
 import { startAgentConversation } from './agent';
 import type { ParsedEmail } from '@/lib/integrations/gmail';
+import type { ParsedSMS } from '@/lib/integrations/twilio';
 import type { MessageStatus, Classification } from '@/types';
+
+// Unified inbound message type that works across all channels
+type InboundPayload = ParsedEmail | ParsedSMS;
 
 interface PipelineResult {
   messageId: string;
@@ -118,7 +122,7 @@ function evaluateCondition(
 
 export async function processInboundMessage(
   userId: string,
-  email: ParsedEmail
+  email: InboundPayload
 ): Promise<PipelineResult> {
   // Check if we already processed this message
   const existing = await getMessageByExternalId(userId, email.messageId);
@@ -139,7 +143,7 @@ export async function processInboundMessage(
   const message = await createInboundMessage({
     userId,
     externalMessageId: email.messageId,
-    channel: 'email',
+    channel: 'channel' in email ? email.channel : 'email',
     senderEmail: email.from,
     senderName: email.fromName ?? undefined,
     senderDomain,

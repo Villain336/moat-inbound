@@ -24,6 +24,8 @@ export const channelEnum = pgEnum('channel', [
   'email',
   'linkedin',
   'twitter',
+  'sms',
+  'phone',
   'other',
 ]);
 

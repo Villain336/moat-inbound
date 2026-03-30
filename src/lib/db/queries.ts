@@ -195,7 +195,7 @@ export async function getMessageByExternalId(
 export async function createInboundMessage(data: {
   userId: string;
   externalMessageId?: string;
-  channel: 'email' | 'linkedin' | 'twitter' | 'other';
+  channel: 'email' | 'linkedin' | 'twitter' | 'sms' | 'phone' | 'other';
   senderEmail?: string;
   senderName?: string;
   senderCompany?: string;

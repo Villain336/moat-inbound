@@ -6,7 +6,7 @@ export type MessageStatus =
   | 'approved'
   | 'quarantined';
 
-export type Channel = 'email' | 'linkedin' | 'twitter' | 'other';
+export type Channel = 'email' | 'linkedin' | 'twitter' | 'sms' | 'phone' | 'other';
 
 export type Classification =
   | 'spam'

@@ -1,41 +1,53 @@
 import Link from 'next/link';
+import {
+  Container,
+  Title,
+  Text,
+  Button,
+  Group,
+  SimpleGrid,
+  Card,
+  Badge,
+  Divider,
+  Stack,
+} from '@mantine/core';
 
 const FEATURES = [
   {
-    icon: '🛡',
+    icon: '\u25C9',
     title: 'AI Classification Engine',
     description:
-      'Claude analyzes every inbound message — scoring threat levels, detecting AI-generated content, and identifying which sales tool sent it.',
+      'Every inbound message scored for threat level, AI-generation patterns, and enrichment signals. Powered by Claude.',
   },
   {
-    icon: '🤖',
+    icon: '\u2694',
     title: 'Agent Defense',
     description:
-      'Your Moat agent intercepts suspicious outreach, qualifies senders with pointed questions, and engages other AI agents in negotiation loops.',
+      'Your defense agent intercepts suspicious outreach, qualifies senders, and engages other AI agents in negotiation.',
   },
   {
-    icon: '⚔',
-    title: 'Defense Rules Engine',
+    icon: '\u2699',
+    title: 'Rules Engine',
     description:
-      'Configurable rules for blocking template variables, detecting automated sequences, and routing qualified leads to your inbox.',
+      'Configurable rules for template variable blocking, sequence detection, domain reputation, and lead routing.',
   },
   {
-    icon: '⚡',
+    icon: '\u26A1',
     title: 'Tool Detection',
     description:
-      'Fingerprint-level detection of Apollo.io, Clay, GoHighLevel, Outreach.io, Instantly, SalesLoft, Polsia, Lemlist, and more.',
+      'Fingerprint-level identification of Apollo, Clay, GoHighLevel, Outreach, Instantly, SalesLoft, and 6 more.',
   },
   {
-    icon: '◎',
+    icon: '\u25CE',
     title: 'Allow / Block Lists',
     description:
-      'VIP allowlists for investors and partners. Permanent blocklists for spam infrastructure. Auto-suggestions from your agent.',
+      'VIP allowlists for investors and partners. Permanent blocklists for spam infrastructure. Auto-suggestions.',
   },
   {
-    icon: '📊',
+    icon: '\u25A0',
     title: 'Command Center',
     description:
-      'Real-time dashboard showing blocked, intercepted, and approved messages. Weekly trends. Tool detection leaderboard.',
+      'Real-time dashboard: blocked, intercepted, approved. Weekly trends. Tool detection leaderboard.',
   },
 ];
 
@@ -46,11 +58,10 @@ const PRICING = [
     period: 'forever',
     description: 'Try the defense',
     features: [
-      '50 messages/month',
+      '50 messages / month',
       'Basic classification',
-      'Allow/block lists',
+      'Allow / block lists',
       '3 defense rules',
-      'Email support',
     ],
     cta: 'Get Started',
     featured: false,
@@ -58,16 +69,15 @@ const PRICING = [
   {
     name: 'Pro',
     price: '$49',
-    period: '/month',
+    period: '/ mo',
     description: 'Full protection',
     features: [
       'Unlimited messages',
       'Full AI classification',
-      'Agent defense (all postures)',
+      'Agent defense — all postures',
       'Unlimited rules',
       'Tool detection',
       'Auto-unsubscribe',
-      'Priority support',
     ],
     cta: 'Start Free Trial',
     featured: true,
@@ -75,15 +85,14 @@ const PRICING = [
   {
     name: 'Executive',
     price: '$149',
-    period: '/month',
+    period: '/ mo',
     description: 'Multi-inbox defense',
     features: [
       'Everything in Pro',
-      'Up to 5 connected inboxes',
+      'Up to 5 inboxes',
       'Team dashboard',
       'Threat intelligence feed',
       'Custom qualification scripts',
-      'Dedicated account manager',
       'API access',
     ],
     cta: 'Contact Sales',
@@ -91,303 +100,315 @@ const PRICING = [
   },
 ];
 
-const TOOLS_DETECTED = [
-  'Apollo.io',
-  'Clay',
-  'GoHighLevel',
-  'Outreach.io',
-  'Instantly',
-  'SalesLoft',
-  'Polsia',
-  'Lemlist',
-  'HubSpot Sequences',
-  'Mailshake',
-  'Woodpecker',
-  'Reply.io',
-];
-
 export default function Home() {
   return (
-    <main className="min-h-screen bg-moat-bg text-white overflow-hidden">
+    <main className="min-h-screen bg-white">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 lg:px-12 py-5 border-b border-white/[0.06]">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-moat-green to-moat-blue flex items-center justify-center text-lg font-extrabold shadow-[0_0_20px_rgba(52,199,89,0.25)]">
-            M
+      <nav className="border-b border-moat-border bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <Container size="lg" className="flex items-center justify-between py-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-moat-black flex items-center justify-center text-moat-yellow text-lg font-extrabold">
+              M
+            </div>
+            <span className="font-display font-bold text-lg tracking-tight text-moat-black">
+              MOAT
+            </span>
           </div>
-          <span className="font-display font-bold text-lg tracking-tight">
-            MOAT
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/login"
-            className="text-white/50 hover:text-white text-sm font-medium transition-colors"
-          >
-            Log in
-          </Link>
-          <Link
-            href="/login"
-            className="px-4 py-2 rounded-lg bg-moat-green/15 text-moat-green text-sm font-semibold border border-moat-green/25 hover:bg-moat-green/25 transition-colors"
-          >
-            Protect Your Inbox
-          </Link>
-        </div>
+          <Group gap="sm">
+            <Button
+              component={Link}
+              href="/login"
+              variant="subtle"
+              color="dark"
+              size="sm"
+            >
+              Log in
+            </Button>
+            <Button
+              component={Link}
+              href="/login"
+              color="dark"
+              size="sm"
+              className="bg-moat-black hover:bg-moat-black/90"
+            >
+              Protect Your Inbox
+            </Button>
+          </Group>
+        </Container>
       </nav>
 
       {/* Hero */}
-      <section className="relative px-6 lg:px-12 pt-20 pb-24 text-center max-w-4xl mx-auto">
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px]" />
-
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-moat-red/10 border border-moat-red/20 mb-8">
-          <span className="w-2 h-2 rounded-full bg-moat-red animate-pulse" />
-          <span className="font-mono text-[11px] text-moat-red font-semibold tracking-wide">
-            AVG EXECUTIVE: 120+ COLD EMAILS/DAY
-          </span>
-        </div>
-
-        <h1 className="text-5xl lg:text-7xl font-bold font-display tracking-tight leading-[1.1] mb-6">
-          Stop the
-          <span className="bg-gradient-to-r from-moat-green to-moat-blue bg-clip-text text-transparent">
-            {' '}
-            Flood
-          </span>
-        </h1>
-
-        <p className="text-lg lg:text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Moat is your AI chief of staff that intercepts, qualifies, and handles
-          the outreach flood before it reaches you. Powered by Claude.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-16">
-          <Link
-            href="/login"
-            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-moat-green to-moat-blue text-white font-semibold text-base shadow-[0_0_30px_rgba(52,199,89,0.2)] hover:shadow-[0_0_40px_rgba(52,199,89,0.3)] transition-shadow"
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)] bg-[size:48px_48px]" />
+        <Container size="md" className="text-center pt-24 pb-20 relative">
+          <Badge
+            color="red"
+            variant="light"
+            size="lg"
+            radius="xl"
+            className="mb-8"
           >
-            Protect Your Inbox
-          </Link>
-          <Link
-            href="#features"
-            className="px-8 py-3.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white/60 font-medium text-base hover:bg-white/[0.08] transition-colors"
-          >
-            See How It Works
-          </Link>
-        </div>
+            AVG EXECUTIVE: 120+ COLD EMAILS / DAY
+          </Badge>
 
-        {/* Stats Bar */}
-        <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
-          {[
-            { value: '12M+', label: 'Messages Analyzed' },
-            { value: '94%', label: 'Spam Caught' },
-            { value: '<2s', label: 'Classification Time' },
-          ].map((stat) => (
-            <div key={stat.label}>
-              <div className="text-2xl font-bold font-display text-white">
-                {stat.value}
+          <Title
+            order={1}
+            className="text-5xl lg:text-7xl font-display font-bold tracking-tight leading-[1.05] mb-6"
+          >
+            Stop the{' '}
+            <span className="bg-moat-yellow px-2 -mx-1 text-moat-black inline-block -rotate-1">
+              Flood
+            </span>
+          </Title>
+
+          <Text
+            size="xl"
+            c="dimmed"
+            className="max-w-xl mx-auto mb-10 leading-relaxed"
+          >
+            AI chief of staff that intercepts, qualifies, and handles
+            the outreach flood before it reaches you.
+          </Text>
+
+          <Group justify="center" gap="md" className="mb-16">
+            <Button
+              component={Link}
+              href="/login"
+              size="xl"
+              color="dark"
+              className="bg-moat-black hover:bg-moat-black/90 shadow-metallic-hover"
+            >
+              Protect Your Inbox
+            </Button>
+            <Button
+              component={Link}
+              href="#features"
+              size="xl"
+              variant="default"
+              className="shadow-metallic hover:shadow-metallic-hover border-moat-border"
+            >
+              See How It Works
+            </Button>
+          </Group>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-6 max-w-md mx-auto">
+            {[
+              { value: '12M+', label: 'Messages Analyzed' },
+              { value: '94%', label: 'Spam Caught' },
+              { value: '<2s', label: 'Classification' },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <Text fw={800} size="xl" className="font-display">
+                  {stat.value}
+                </Text>
+                <Text size="xs" c="dimmed" className="font-mono tracking-wide uppercase">
+                  {stat.label}
+                </Text>
               </div>
-              <div className="text-[10px] font-mono text-white/30 tracking-wider mt-1">
-                {stat.label.toUpperCase()}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Container>
       </section>
 
       {/* Tools Ticker */}
-      <section className="border-y border-white/[0.06] py-4 overflow-hidden">
-        <div className="flex gap-6 animate-[scroll_30s_linear_infinite] whitespace-nowrap">
-          {[...TOOLS_DETECTED, ...TOOLS_DETECTED].map((tool, i) => (
+      <div className="border-y border-moat-border py-3 overflow-hidden bg-moat-surface">
+        <div className="flex gap-8 animate-[scroll_40s_linear_infinite] whitespace-nowrap">
+          {[
+            'Apollo.io', 'Clay', 'GoHighLevel', 'Outreach.io', 'Instantly',
+            'SalesLoft', 'Polsia', 'Lemlist', 'HubSpot', 'Mailshake',
+            'Woodpecker', 'Reply.io',
+            'Apollo.io', 'Clay', 'GoHighLevel', 'Outreach.io', 'Instantly',
+            'SalesLoft', 'Polsia', 'Lemlist', 'HubSpot', 'Mailshake',
+            'Woodpecker', 'Reply.io',
+          ].map((tool, i) => (
             <span
               key={i}
-              className="font-mono text-xs text-moat-purple/60 flex items-center gap-2"
+              className="font-mono text-xs text-moat-silver-dark flex items-center gap-2"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-moat-purple/40" />
+              <span className="w-1.5 h-1.5 rounded-full bg-moat-yellow" />
               {tool}
             </span>
           ))}
         </div>
-      </section>
+      </div>
 
       {/* Features */}
-      <section id="features" className="px-6 lg:px-12 py-20 max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold font-display tracking-tight mb-4">
-            Defense in Depth
-          </h2>
-          <p className="text-white/40 max-w-xl mx-auto">
-            Six layers of AI-powered protection between the outreach flood and
-            your inbox.
-          </p>
-        </div>
+      <section id="features" className="py-20">
+        <Container size="lg">
+          <div className="text-center mb-14">
+            <Title order={2} className="font-display text-3xl lg:text-4xl tracking-tight mb-3">
+              Defense in Depth
+            </Title>
+            <Text c="dimmed" className="max-w-lg mx-auto">
+              Six layers of protection between the outreach flood and your inbox.
+            </Text>
+          </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {FEATURES.map((feature) => (
-            <div
-              key={feature.title}
-              className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-colors"
-            >
-              <div className="text-3xl mb-4">{feature.icon}</div>
-              <h3 className="font-display font-semibold text-lg mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-white/40 text-sm leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
-          ))}
-        </div>
+          <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
+            {FEATURES.map((f) => (
+              <Card
+                key={f.title}
+                padding="xl"
+                radius="lg"
+                className="bg-metallic shadow-card hover:shadow-card-hover transition-shadow border border-moat-border"
+              >
+                <Text className="text-2xl mb-3 text-moat-black">{f.icon}</Text>
+                <Text fw={600} size="lg" className="font-display mb-2">
+                  {f.title}
+                </Text>
+                <Text size="sm" c="dimmed" className="leading-relaxed">
+                  {f.description}
+                </Text>
+              </Card>
+            ))}
+          </SimpleGrid>
+        </Container>
       </section>
 
       {/* How It Works */}
-      <section className="px-6 lg:px-12 py-20 border-t border-white/[0.06]">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold font-display tracking-tight mb-4">
+      <section className="py-20 bg-moat-black text-white">
+        <Container size="md">
+          <div className="text-center mb-14">
+            <Title order={2} className="font-display text-3xl lg:text-4xl tracking-tight mb-3 text-white">
               Three Steps to Silence
-            </h2>
+            </Title>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
+          <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl">
             {[
               {
                 step: '01',
-                title: 'Connect Gmail',
-                description:
-                  'One-click Google OAuth. Moat reads your inbox in real-time via push notifications. No forwarding, no delays.',
+                title: 'Connect',
+                description: 'One-click Google OAuth. Moat reads your inbox in real-time. No forwarding.',
               },
               {
                 step: '02',
-                title: 'AI Classifies',
-                description:
-                  'Every message is scored for threat level, checked against defense rules, and fingerprinted for sales tool signatures.',
+                title: 'Classify',
+                description: 'Every message scored for threats, checked against rules, fingerprinted for tool signatures.',
               },
               {
                 step: '03',
-                title: 'Agent Defends',
-                description:
-                  'Suspicious senders are intercepted. Your Moat agent qualifies them with pointed questions before anything reaches you.',
+                title: 'Defend',
+                description: 'Suspicious senders intercepted. Your agent qualifies them before anything reaches you.',
               },
             ].map((item) => (
               <div key={item.step} className="text-center">
-                <div className="font-mono text-moat-green text-3xl font-bold mb-4">
+                <Text className="font-mono text-moat-yellow text-3xl font-bold mb-3">
                   {item.step}
-                </div>
-                <h3 className="font-display font-semibold text-lg mb-2">
+                </Text>
+                <Text fw={600} size="lg" className="font-display mb-2 text-white">
                   {item.title}
-                </h3>
-                <p className="text-white/40 text-sm leading-relaxed">
+                </Text>
+                <Text size="sm" c="dimmed">
                   {item.description}
-                </p>
+                </Text>
               </div>
             ))}
-          </div>
-        </div>
+          </SimpleGrid>
+        </Container>
       </section>
 
       {/* Pricing */}
-      <section
-        id="pricing"
-        className="px-6 lg:px-12 py-20 border-t border-white/[0.06]"
-      >
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold font-display tracking-tight mb-4">
+      <section id="pricing" className="py-20">
+        <Container size="lg">
+          <div className="text-center mb-14">
+            <Title order={2} className="font-display text-3xl lg:text-4xl tracking-tight mb-3">
               Simple Pricing
-            </h2>
-            <p className="text-white/40">
-              Start free. Upgrade when the flood gets serious.
-            </p>
+            </Title>
+            <Text c="dimmed">Start free. Upgrade when the flood gets serious.</Text>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <SimpleGrid cols={{ base: 1, md: 3 }} spacing="lg">
             {PRICING.map((plan) => (
-              <div
+              <Card
                 key={plan.name}
-                className={`p-6 rounded-2xl border ${
+                padding="xl"
+                radius="lg"
+                className={`shadow-card hover:shadow-card-hover transition-shadow border ${
                   plan.featured
-                    ? 'border-moat-green/30 bg-moat-green/[0.03]'
-                    : 'border-white/[0.06] bg-white/[0.02]'
+                    ? 'border-moat-yellow bg-moat-yellow/[0.04]'
+                    : 'border-moat-border bg-metallic'
                 }`}
               >
                 {plan.featured && (
-                  <div className="font-mono text-[10px] text-moat-green tracking-widest font-semibold mb-3">
+                  <Badge color="yellow" variant="filled" size="sm" className="mb-3 text-moat-black">
                     MOST POPULAR
-                  </div>
+                  </Badge>
                 )}
-                <h3 className="font-display font-bold text-xl">{plan.name}</h3>
-                <div className="flex items-baseline gap-1 mt-2 mb-1">
-                  <span className="text-3xl font-bold font-display">
+                <Text fw={700} size="xl" className="font-display">
+                  {plan.name}
+                </Text>
+                <Group gap={4} className="mt-1 mb-1" align="baseline">
+                  <Text fw={800} className="text-3xl font-display">
                     {plan.price}
-                  </span>
-                  <span className="text-white/30 text-sm">{plan.period}</span>
-                </div>
-                <p className="text-white/40 text-sm mb-6">
+                  </Text>
+                  <Text size="sm" c="dimmed">{plan.period}</Text>
+                </Group>
+                <Text size="sm" c="dimmed" className="mb-5">
                   {plan.description}
-                </p>
-                <ul className="space-y-2.5 mb-8">
+                </Text>
+                <Stack gap="xs" className="mb-6">
                   {plan.features.map((f) => (
-                    <li
-                      key={f}
-                      className="flex items-center gap-2 text-sm text-white/60"
-                    >
-                      <span className="text-moat-green text-xs">&#10003;</span>
+                    <Text key={f} size="sm" className="flex items-center gap-2">
+                      <span className="text-moat-success text-xs">{'\u2713'}</span>
                       {f}
-                    </li>
+                    </Text>
                   ))}
-                </ul>
-                <Link
+                </Stack>
+                <Button
+                  component={Link}
                   href="/login"
-                  className={`block text-center py-2.5 rounded-lg text-sm font-semibold transition-colors ${
-                    plan.featured
-                      ? 'bg-moat-green/20 text-moat-green border border-moat-green/30 hover:bg-moat-green/30'
-                      : 'bg-white/[0.06] text-white/70 border border-white/[0.08] hover:bg-white/[0.1]'
-                  }`}
+                  fullWidth
+                  variant={plan.featured ? 'filled' : 'default'}
+                  color={plan.featured ? 'dark' : undefined}
+                  className={plan.featured ? 'bg-moat-black hover:bg-moat-black/90' : 'shadow-metallic'}
                 >
                   {plan.cta}
-                </Link>
-              </div>
+                </Button>
+              </Card>
             ))}
-          </div>
-        </div>
+          </SimpleGrid>
+        </Container>
       </section>
 
       {/* CTA */}
-      <section className="px-6 lg:px-12 py-20 border-t border-white/[0.06]">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold font-display tracking-tight mb-4">
+      <section className="py-20 bg-moat-surface border-t border-moat-border">
+        <Container size="sm" className="text-center">
+          <Title order={2} className="font-display text-3xl tracking-tight mb-4">
             Reclaim Your Inbox
-          </h2>
-          <p className="text-white/40 mb-8">
-            Join executives who stopped drowning in cold email and let AI handle
-            the flood.
-          </p>
-          <Link
+          </Title>
+          <Text c="dimmed" className="mb-8">
+            Join executives who stopped drowning in cold email.
+          </Text>
+          <Button
+            component={Link}
             href="/login"
-            className="inline-block px-10 py-4 rounded-xl bg-gradient-to-r from-moat-green to-moat-blue text-white font-semibold text-lg shadow-[0_0_30px_rgba(52,199,89,0.2)] hover:shadow-[0_0_50px_rgba(52,199,89,0.3)] transition-shadow"
+            size="xl"
+            color="dark"
+            className="bg-moat-black hover:bg-moat-black/90 shadow-metallic-hover"
           >
-            Protect Your Inbox — Free
-          </Link>
-        </div>
+            Protect Your Inbox -- Free
+          </Button>
+        </Container>
       </section>
 
       {/* Footer */}
-      <footer className="px-6 lg:px-12 py-8 border-t border-white/[0.06]">
-        <div className="flex items-center justify-between max-w-6xl mx-auto">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-moat-green to-moat-blue flex items-center justify-center text-xs font-extrabold">
+      <footer className="py-6 border-t border-moat-border">
+        <Container size="lg" className="flex items-center justify-between">
+          <Group gap="xs">
+            <div className="w-6 h-6 rounded bg-moat-black flex items-center justify-center text-moat-yellow text-[10px] font-extrabold">
               M
             </div>
-            <span className="font-mono text-[10px] text-white/25 tracking-widest">
+            <Text size="xs" c="dimmed" className="font-mono tracking-widest">
               MOAT DEFENSE SYSTEM
-            </span>
-          </div>
-          <div className="text-[11px] text-white/20 font-mono">
-            &copy; 2026 Launchabl LLC
-          </div>
-        </div>
+            </Text>
+          </Group>
+          <Text size="xs" c="dimmed" className="font-mono">
+            {'\u00A9'} 2026 Launchabl LLC
+          </Text>
+        </Container>
       </footer>
 
-      {/* Scroll animation keyframe */}
       <style
         dangerouslySetInnerHTML={{
           __html: `@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }`,

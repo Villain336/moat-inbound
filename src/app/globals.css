@@ -3,31 +3,33 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import '@mantine/core/styles.css';
 
 :root {
-  --moat-bg: #09090b;
-  --moat-surface: rgba(255, 255, 255, 0.02);
-  --moat-border: rgba(255, 255, 255, 0.06);
-  --moat-green: #34c759;
-  --moat-red: #ff3b30;
-  --moat-orange: #ff9500;
-  --moat-blue: #007aff;
-  --moat-purple: #8b5cf6;
+  --moat-black: #0a0a0a;
+  --moat-yellow: #f5c518;
+  --moat-yellow-light: #fde68a;
+  --moat-silver: #c0c0c0;
+  --moat-silver-light: #e8e8e8;
+  --moat-chrome: #d4d4d8;
+  --moat-surface: #fafafa;
+  --moat-border: #e4e4e7;
 }
 
 body {
-  background: var(--moat-bg);
-  color: #fff;
+  background: #ffffff;
+  color: var(--moat-black);
   font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  scrollbar-color: var(--moat-chrome) transparent;
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -35,6 +37,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: var(--moat-chrome);
+  border-radius: 3px;
+}
+
+::selection {
+  background: var(--moat-yellow);
+  color: var(--moat-black);
 }

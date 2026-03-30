@@ -5,11 +5,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import {
-  ThreatBadge,
-  StatusPill,
-  ToolTag,
-  ChannelIcon,
-} from '@/components/ui/badges';
+  Title,
+  Text,
+  Card,
+  Button,
+  Group,
+  UnstyledButton,
+  SegmentedControl,
+} from '@mantine/core';
+import { ThreatBadge, StatusPill, ToolTag, ChannelIcon } from '@/components/ui/badges';
 import { formatDistanceToNow } from 'date-fns';
 
 interface Message {
@@ -30,14 +34,6 @@ interface Message {
   matchedRules: unknown;
   receivedAt: Date;
 }
-
-const FILTER_TABS = [
-  { value: 'all', label: 'All' },
-  { value: 'blocked', label: 'Blocked' },
-  { value: 'intercepted', label: 'Intercepted' },
-  { value: 'agent_handling', label: 'Agent' },
-  { value: 'approved', label: 'Approved' },
-];
 
 export function InboundFeed({
   messages,
@@ -62,176 +58,171 @@ export function InboundFeed({
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold font-display tracking-tight">
-          Inbound Feed
-        </h1>
-        <p className="text-white/40 font-mono text-xs mt-1">
+        <Title order={2} className="font-display tracking-tight">Inbound Feed</Title>
+        <Text size="xs" c="dimmed" className="font-mono mt-1">
           {total} MESSAGES PROCESSED
-        </p>
+        </Text>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex gap-1 bg-white/[0.02] rounded-lg p-1 border border-white/[0.06] w-fit">
-        {FILTER_TABS.map((tab) => (
-          <Link
-            key={tab.value}
-            href={`/dashboard/inbox${tab.value !== 'all' ? `?status=${tab.value}` : ''}`}
-            className={clsx(
-              'px-3 py-1.5 rounded-md text-xs font-mono font-medium transition-colors',
-              currentStatus === tab.value
-                ? 'bg-white/[0.08] text-white'
-                : 'text-white/40 hover:text-white/60'
-            )}
-          >
-            {tab.label}
-          </Link>
-        ))}
-      </div>
+      <SegmentedControl
+        value={currentStatus}
+        onChange={(val) => {
+          router.push(`/dashboard/inbox${val !== 'all' ? `?status=${val}` : ''}`);
+        }}
+        data={[
+          { value: 'all', label: 'All' },
+          { value: 'blocked', label: 'Blocked' },
+          { value: 'intercepted', label: 'Intercepted' },
+          { value: 'agent_handling', label: 'Agent' },
+          { value: 'approved', label: 'Approved' },
+        ]}
+        size="xs"
+        className="font-mono"
+      />
 
       <div className="flex gap-4">
         {/* Message List */}
         <div className="flex-1 space-y-1">
           {messages.map((msg) => (
-            <button
+            <UnstyledButton
               key={msg.id}
               onClick={() => setSelected(msg)}
               className={clsx(
-                'w-full text-left flex items-center gap-3 p-3 rounded-lg transition-colors',
+                'w-full text-left flex items-center gap-3 p-3 rounded-lg transition-all',
                 selected?.id === msg.id
-                  ? 'bg-white/[0.06] border border-white/[0.08]'
-                  : 'hover:bg-white/[0.03] border border-transparent'
+                  ? 'bg-moat-yellow/10 border border-moat-yellow/30 shadow-sm'
+                  : 'hover:bg-moat-surface border border-transparent'
               )}
             >
               <ChannelIcon channel={msg.channel} />
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium truncate">
+                <Group gap="xs">
+                  <Text size="sm" fw={500} truncate>
                     {msg.senderName || msg.senderEmail || 'Unknown'}
-                  </span>
+                  </Text>
                   {msg.senderCompany && (
-                    <span className="text-white/25 text-[11px] font-mono truncate hidden sm:inline">
+                    <Text size="xs" c="dimmed" className="font-mono hidden sm:inline" truncate>
                       {msg.senderCompany}
-                    </span>
+                    </Text>
                   )}
-                </div>
-                <div className="text-white/40 text-xs truncate">
-                  {msg.subject}
-                </div>
+                </Group>
+                <Text size="xs" c="dimmed" truncate>{msg.subject}</Text>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <Group gap="xs" wrap="nowrap">
                 <ToolTag tool={msg.toolDetected} />
                 <ThreatBadge score={msg.threatScore ?? 0} />
                 <StatusPill status={msg.status} />
-                <span className="text-white/25 text-[10px] font-mono w-14 text-right hidden md:block">
-                  {formatDistanceToNow(new Date(msg.receivedAt), {
-                    addSuffix: false,
-                  })}
-                </span>
-              </div>
-            </button>
+                <Text size="xs" c="dimmed" className="font-mono w-14 text-right hidden md:block">
+                  {formatDistanceToNow(new Date(msg.receivedAt), { addSuffix: false })}
+                </Text>
+              </Group>
+            </UnstyledButton>
           ))}
           {messages.length === 0 && (
-            <div className="text-center py-16 text-white/20 font-mono text-sm">
+            <Text size="sm" c="dimmed" className="font-mono text-center py-16">
               No messages found
-            </div>
+            </Text>
           )}
 
-          {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center gap-2 pt-4">
+            <Group justify="center" gap="sm" className="pt-4">
               {page > 1 && (
-                <Link
+                <Button
+                  component={Link}
                   href={`/dashboard/inbox?${currentStatus !== 'all' ? `status=${currentStatus}&` : ''}page=${page - 1}`}
-                  className="px-3 py-1.5 rounded-md bg-white/[0.04] text-white/60 text-xs font-mono hover:bg-white/[0.08]"
+                  variant="default"
+                  size="xs"
+                  className="font-mono shadow-metallic"
                 >
-                  ← Prev
-                </Link>
+                  {'\u2190'} Prev
+                </Button>
               )}
-              <span className="px-3 py-1.5 text-white/30 text-xs font-mono">
+              <Text size="xs" c="dimmed" className="font-mono">
                 {page} / {totalPages}
-              </span>
+              </Text>
               {page < totalPages && (
-                <Link
+                <Button
+                  component={Link}
                   href={`/dashboard/inbox?${currentStatus !== 'all' ? `status=${currentStatus}&` : ''}page=${page + 1}`}
-                  className="px-3 py-1.5 rounded-md bg-white/[0.04] text-white/60 text-xs font-mono hover:bg-white/[0.08]"
+                  variant="default"
+                  size="xs"
+                  className="font-mono shadow-metallic"
                 >
-                  Next →
-                </Link>
+                  Next {'\u2192'}
+                </Button>
               )}
-            </div>
+            </Group>
           )}
         </div>
 
         {/* Detail Panel */}
         {selected && (
-          <div className="hidden lg:block w-96 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 sticky top-8 self-start">
-            <div className="flex items-center justify-between mb-4">
+          <Card
+            padding="lg"
+            radius="lg"
+            className="hidden lg:block w-96 bg-metallic shadow-card border border-moat-border sticky top-8 self-start"
+          >
+            <Group justify="space-between" className="mb-4">
               <StatusPill status={selected.status} />
-              <button
+              <UnstyledButton
                 onClick={() => setSelected(null)}
-                className="text-white/30 hover:text-white/60 text-xs"
+                className="text-moat-silver-dark hover:text-moat-black text-xs"
               >
-                ✕
-              </button>
-            </div>
+                {'\u2715'}
+              </UnstyledButton>
+            </Group>
 
-            <h3 className="font-display font-semibold text-lg mb-1">
+            <Title order={4} className="font-display mb-1">
               {selected.subject || '(No Subject)'}
-            </h3>
-            <div className="flex items-center gap-2 text-sm text-white/50 mb-4">
-              <span>{selected.senderName || selected.senderEmail}</span>
+            </Title>
+            <Group gap="xs" className="mb-4">
+              <Text size="sm" c="dimmed">
+                {selected.senderName || selected.senderEmail}
+              </Text>
               {selected.senderCompany && (
                 <>
-                  <span className="text-white/20">·</span>
-                  <span className="font-mono text-xs">
+                  <Text size="xs" c="dimmed">{'\u00B7'}</Text>
+                  <Text size="xs" c="dimmed" className="font-mono">
                     {selected.senderCompany}
-                  </span>
+                  </Text>
                 </>
               )}
-            </div>
+            </Group>
 
-            <div className="flex gap-2 mb-4">
+            <Group gap="xs" className="mb-4">
               <ThreatBadge score={selected.threatScore ?? 0} />
               <ToolTag tool={selected.toolDetected} />
-            </div>
+            </Group>
 
-            {/* AI Analysis */}
             {selected.aiAnalysis && (
               <div className="mb-4">
-                <h4 className="font-mono text-[10px] text-white/40 tracking-widest mb-2">
+                <Text size="xs" c="dimmed" className="font-mono tracking-widest mb-2">
                   AI ANALYSIS
-                </h4>
-                <div className="p-3 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-white/60 leading-relaxed">
-                  {(selected.aiAnalysis as Record<string, unknown>).reasoning as string ||
-                    'No analysis available'}
-                </div>
+                </Text>
+                <Card padding="sm" radius="md" className="bg-white border border-moat-border">
+                  <Text size="xs" c="dimmed" className="leading-relaxed">
+                    {(selected.aiAnalysis as Record<string, unknown>).reasoning as string || 'No analysis available'}
+                  </Text>
+                </Card>
               </div>
             )}
 
-            {/* Message Preview */}
-            <div>
-              <h4 className="font-mono text-[10px] text-white/40 tracking-widest mb-2">
+            <div className="mb-4">
+              <Text size="xs" c="dimmed" className="font-mono tracking-widest mb-2">
                 MESSAGE PREVIEW
-              </h4>
-              <div className="p-3 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-white/50 leading-relaxed max-h-48 overflow-y-auto">
-                {selected.bodyPreview || selected.bodyFull || 'No preview available'}
-              </div>
+              </Text>
+              <Card padding="sm" radius="md" className="bg-white border border-moat-border max-h-48 overflow-y-auto">
+                <Text size="xs" c="dimmed" className="leading-relaxed">
+                  {selected.bodyPreview || selected.bodyFull || 'No preview available'}
+                </Text>
+              </Card>
             </div>
 
-            {/* Actions */}
-            <div className="flex gap-2 mt-4">
-              <ActionButton
-                label="Approve"
-                messageId={selected.id}
-                action="approved"
-              />
-              <ActionButton
-                label="Block Domain"
-                messageId={selected.id}
-                action="blocked"
-              />
-            </div>
-          </div>
+            <Group gap="xs">
+              <ActionButton label="Approve" messageId={selected.id} action="approved" color="green" />
+              <ActionButton label="Block Domain" messageId={selected.id} action="blocked" color="red" />
+            </Group>
+          </Card>
         )}
       </div>
     </div>
@@ -242,10 +233,12 @@ function ActionButton({
   label,
   messageId,
   action,
+  color,
 }: {
   label: string;
   messageId: string;
   action: string;
+  color: string;
 }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -265,18 +258,15 @@ function ActionButton({
   };
 
   return (
-    <button
+    <Button
       onClick={handleClick}
-      disabled={loading}
-      className={clsx(
-        'flex-1 px-3 py-2 rounded-lg text-xs font-mono font-medium transition-colors border',
-        action === 'approved'
-          ? 'bg-moat-green/10 text-moat-green border-moat-green/20 hover:bg-moat-green/20'
-          : 'bg-moat-red/10 text-moat-red border-moat-red/20 hover:bg-moat-red/20',
-        loading && 'opacity-50'
-      )}
+      loading={loading}
+      variant="light"
+      color={color}
+      size="xs"
+      className="flex-1 font-mono"
     >
-      {loading ? '...' : label}
-    </button>
+      {label}
+    </Button>
   );
 }
